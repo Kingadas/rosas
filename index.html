@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para você, meu amor</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0408">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0d0408; --bg2:#2a0a16; --ink:#f6dfe3; --soft:#c9a1aa; --edge:#ff5c8a; --core:#ffb3c6; --line:#a3134a;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100%;color:var(--ink);position:relative;
+  background:radial-gradient(ellipse at 50% 22%,var(--bg2) 0%,var(--bg) 72%) fixed;
+  font-family:"Cormorant Garamond",Georgia,serif;
+  display:flex;flex-direction:column;align-items:center;
+  padding:24px 22px 56px;overflow-x:hidden;
+}
+#hearts{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.fh{position:absolute;bottom:-40px;color:#ff4f78;opacity:0;line-height:1;animation:rise var(--d) linear var(--w) infinite}
+.fh i{display:block;font-style:normal;text-shadow:0 0 10px rgba(255,79,120,.55);
+  animation:sway var(--s) ease-in-out infinite alternate,beat var(--b) ease-in-out infinite}
+@keyframes rise{0%{transform:translateY(0);opacity:0}12%{opacity:.85}85%{opacity:.7}100%{transform:translateY(-112vh);opacity:0}}
+@keyframes sway{from{translate:-18px 0}to{translate:18px 0}}
+@keyframes beat{0%,100%{scale:.85}50%{scale:1.2}}
+.stage{position:relative;z-index:1;width:min(100%,360px)}
+.stage::before{content:"";position:absolute;inset:-24px;background:radial-gradient(ellipse at 50% 26%,rgba(210,30,85,.24),transparent 62%)}
+#cv{position:relative;display:block;margin:0 auto}
+.letter{position:relative;z-index:1;max-width:30em;text-align:center;margin-top:18px}
+.letter h1{font-family:"Dancing Script",cursive;font-weight:600;font-size:2.4rem;margin:0 0 18px;color:var(--core)}
+.letter p{font-size:1.28rem;line-height:1.6;margin:0 0 16px}
+.letter p.dim{color:var(--soft);font-style:italic}
+.sign{font-family:"Dancing Script",cursive;font-size:1.7rem;color:var(--edge);margin-top:26px}
+.reveal{opacity:0;transform:translateY(10px);transition:opacity 1.6s ease,transform 1.6s ease}
+.reveal.in{opacity:1;transform:none}
+button{margin-top:30px;background:none;border:1px solid var(--line);color:var(--soft);font:inherit;font-size:1.05rem;padding:10px 20px;border-radius:999px;cursor:pointer}
+button:focus-visible{outline:2px solid var(--edge);outline-offset:3px}
+.oh{position:absolute;z-index:2;color:#ff4f78;line-height:1;pointer-events:none;animation:bob var(--s) ease-in-out infinite alternate}
+.oh i{display:block;font-style:normal;text-shadow:0 0 12px rgba(255,79,120,.7);animation:beat var(--b) ease-in-out infinite}
+@keyframes bob{from{translate:-8px 6px}to{translate:8px -10px}}
+</style>
+</head>
+<body>
+<div id="hearts"></div>
+<div class="stage"><canvas id="cv" role="img" aria-label="Uma rosa desenhada com números, como código caindo"></canvas></div>
+
+<main class="letter">
+  <h1 class="reveal">Para você, meu amor</h1>
+  <p class="reveal">Desde o dia 7 de outubro, quando a gente começou a namorar, o meu mundo ficou mais bonito. Foi ali que o meu coração entendeu para onde queria voltar todos os dias: para você.</p>
+  <p class="reveal">A distância é só um endereço. O meu coração já mora aí, do seu lado.</p>
+  <p class="reveal">Hoje existem quilômetros entre nós, mas nenhum deles é grande o bastante para caber o que eu sinto. Cada mensagem sua eu me apaixono sou apaixonado em cada detalhe seu amor seu jeitinho carinhosa seu jeitinho fofo e seu jeito safada heehheeh amo a sua personalidade seu sorriso me deixa louco ❤🌹.</p>
+  <p class="reveal">Eu sei que a saudade aperta. Mas ela também me lembra, todos os dias, o quanto você importa. Quem ama de longe aprende a amar de verdade: com paciência, com cuidado, com saudade que vira promessa.</p>
+  <p class="reveal">Por enquanto é distância. Mas eu já estou contando os dias até o momento em que vou te abraçar sem pressa amor eu quero ter uma família com vc filhos casar e uma casa nossa minha princesa.</p>
+  <p class="reveal dim">Até lá, esta rosa é a minha forma de dizer: eu escolho você, todos os dias, de perto ou de longe.</p>
+  <div class="sign reveal">Com todo o meu amor ♥</div>
+  <button class="reveal" id="again" type="button">do seu amor king❤ </button>
+</main>
+
+<script>
+(function(){
+var COLS=64,ROWS=58,BW=368,BH=600,K2=Math.PI*2;
+var cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+var off=document.createElement('canvas');off.width=COLS*3;off.height=ROWS*3;
+var o=off.getContext('2d');
+var sm=document.createElement('canvas');sm.width=COLS;sm.height=ROWS;
+var s=sm.getContext('2d',{willReadFrequently:true});
+s.imageSmoothingEnabled=true;s.imageSmoothingQuality='high';
+var reduce=false;
+function hash(x,y){var v=Math.sin(x*127.1+y*311.7)*43758.5453;return v-Math.floor(v);}
+
+/* corações flutuando */
+var hb=document.getElementById('hearts');
+for(var n=0;n<18;n++){
+  var h=document.createElement('span'),d=9+hash(n,1)*8;
+  h.className='fh';h.innerHTML='<i>♥</i>';
+  h.style.left=(hash(n,2)*96)+'%';h.style.fontSize=(10+hash(n,3)*18)+'px';
+  h.style.setProperty('--d',d+'s');h.style.setProperty('--w',(-hash(n,4)*d)+'s');
+  h.style.setProperty('--s',(2.5+hash(n,5)*2.5)+'s');h.style.setProperty('--b',(1.2+hash(n,6)+'s'));
+  hb.appendChild(h);
+}
+var st=document.querySelector('.stage');
+[[4,6],[88,4],[-2,24],[94,26],[8,40],[86,42],[26,-2],[70,-3],[0,50],[95,54]].forEach(function(p,n){
+  var e=document.createElement('span');e.className='oh';e.innerHTML='<i>♥</i>';
+  e.style.left=p[0]+'%';e.style.top=p[1]+'%';e.style.fontSize=(14+hash(n,9)*12)+'px';
+  e.style.setProperty('--s',(2.4+hash(n,8)*2)+'s');e.style.setProperty('--b',(1.1+hash(n,7)*.9)+'s');
+  st.appendChild(e);
+});
+
+/* tamanho */
+var W,H,cw,ch,fs,dpr;
+function fit(){
+  var w=Math.min(cv.parentNode.clientWidth,360);dpr=Math.min(window.devicePixelRatio||1,2);
+  W=w;H=w*BH/BW;cw=W/COLS;ch=H/ROWS;fs=ch*0.84;
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+}
+
+/* desenho da rosa (imagem base) */
+function lf(x,y,a,len,c0,c1){
+  o.save();o.translate(x,y);o.rotate(a);
+  o.beginPath();o.moveTo(0,0);
+  o.bezierCurveTo(len*.2,-len*.34,len*.75,-len*.3,len,0);
+  o.bezierCurveTo(len*.75,len*.3,len*.2,len*.34,0,0);
+  var g=o.createLinearGradient(0,0,len,0);g.addColorStop(0,c0);g.addColorStop(1,c1);
+  o.fillStyle=g;o.fill();
+  o.beginPath();o.moveTo(2,0);o.lineTo(len*.92,0);
+  o.lineWidth=1.6;o.strokeStyle='rgba(190,255,215,.55)';o.stroke();
+  o.restore();
+}
+function petal(L,Wd,a,c0,c1,c2){
+  o.save();o.rotate(a);
+  o.beginPath();o.moveTo(0,0);
+  o.bezierCurveTo(-Wd*.95,-L*.15,-Wd*.75,-L*.95,0,-L);
+  o.bezierCurveTo(Wd*.75,-L*.95,Wd*.95,-L*.15,0,0);
+  var g=o.createLinearGradient(0,0,0,-L);
+  g.addColorStop(0,c0);g.addColorStop(.55,c1);g.addColorStop(1,c2);
+  o.fillStyle=g;o.fill();
+  o.lineWidth=1.5;o.strokeStyle='rgba(60,0,20,.55)';o.stroke();
+  o.beginPath();o.moveTo(-Wd*.6,-L*.86);o.quadraticCurveTo(0,-L*1.04,Wd*.6,-L*.86);
+  o.lineWidth=3;o.strokeStyle='rgba(255,190,205,.55)';o.stroke();
+  o.restore();
+}
+var RINGS=[[8,130,76,.2,'#2a0410','#b3124a','#ff7aa3'],
+[7,108,66,.5,'#2a0410','#92103f','#ef4f83'],
+[6,86,55,.1,'#240310','#7d0c35','#dd3d73'],
+[5,64,44,.4,'#200310','#6a0a2d','#c8316a'],
+[4,44,32,0,'#1c020d','#580826','#b02660']];
+function stemPath(dx){o.beginPath();o.moveTo(184+dx,640);o.bezierCurveTo(168+dx,520,204+dx,420,188+dx,282);}
+function thorn(x,y,dir){o.beginPath();o.moveTo(x,y-4);o.lineTo(x+dir*14,y-13);o.lineTo(x,y+4);o.fillStyle='#2a8a55';o.fill();}
+
+function render(t){
+  o.setTransform(1,0,0,1,0,0);o.clearRect(0,0,off.width,off.height);
+  o.setTransform(off.width/BW,0,0,off.height/BH,0,0);
+  var sw=reduce?0:.022*Math.sin(t*1.2);
+  o.translate(184,612);o.rotate(sw);o.translate(-184,-612);
+  o.lineCap='round';
+  var ps=ez(t/2.6);
+  o.setLineDash([420,420]);o.lineDashOffset=420*(1-ps);
+  stemPath(0);o.lineWidth=10;o.strokeStyle='#23764a';o.stroke();
+  stemPath(-2);o.lineWidth=3;o.strokeStyle='#5fd69a';o.stroke();
+  o.setLineDash([]);
+  if(ps>.5)thorn(176,520,-1);if(ps>.7)thorn(194,430,1);if(ps>.85)thorn(190,350,-1);
+  var gr=function(x,y,a,len,t1){var p=ez((t-t1)/1.1);if(p>0)lf(x,y,a,len*p,'#14583a','#52d391');};
+  gr(180,486,Math.PI+.5,125,1.3);gr(192,410,-.55,115,1.8);gr(188,340,Math.PI+.8,78,2.2);gr(190,312,-.9,64,2.5);
+  var cp=ez((t-2.5)/.8);o.beginPath();o.ellipse(186,282,24*cp+.01,20*cp+.01,0,0,K2);
+  var cg=o.createLinearGradient(0,262,0,302);cg.addColorStop(0,'#1d6a41');cg.addColorStop(1,'#43b377');
+  o.fillStyle=cg;o.fill();
+  [2.35,1.95,1.2,.8].forEach(function(a){lf(186,276,a,64*cp,'#14583a','#4cc487');});
+  /* cabeça */
+  o.save();o.translate(184,152);o.scale(1.12,.98);
+  RINGS.forEach(function(r,i){
+    var n=r[0],gp=ez((t-(3+(4-i)*.75))/1.8);if(gp<=0)return;var br=gp*(1+.012*Math.sin(t*1.7+i));
+    if(i>0){
+      o.globalCompositeOperation='source-atop';
+      var g=o.createRadialGradient(0,0,0,0,0,r[1]*gp);
+      g.addColorStop(0,'rgba(20,0,8,.6)');g.addColorStop(1,'rgba(20,0,8,0)');
+      o.fillStyle=g;o.beginPath();o.arc(0,0,r[1]*gp,0,K2);o.fill();
+      o.globalCompositeOperation='source-over';
+    }
+    o.save();o.rotate((1-gp)*.6);o.scale(br,br);
+    for(var j=0;j<n;j++){
+      petal(r[1]*(.92+.16*hash(j,i+7)),r[2]*(.9+.2*hash(j+5,i)),
+        r[3]+j*K2/n+(hash(j,i)-.5)*.3,r[4],r[5],r[6]);
+    }
+    o.restore();
+  });
+  o.globalCompositeOperation='source-atop';
+  for(var k=0;k<5;k++){
+    o.beginPath();o.arc(Math.cos(k*1.3)*2,Math.sin(k*1.3)*2,5+k*5,k*1.1,k*1.1+3.6);
+    o.lineWidth=2.2;o.strokeStyle='rgba(255,150,175,'+(.5-k*.06)+')';o.stroke();
+    o.beginPath();o.arc(Math.cos(k*1.3)*2+2,Math.sin(k*1.3)*2+2,7+k*5,k*1.1+.4,k*1.1+3.4);
+    o.lineWidth=1.6;o.strokeStyle='rgba(40,0,15,.45)';o.stroke();
+  }
+  var gl=o.createRadialGradient(-40,-50,0,-40,-50,120);
+  gl.addColorStop(0,'rgba(255,205,220,.32)');gl.addColorStop(1,'rgba(255,205,220,0)');
+  o.fillStyle=gl;o.beginPath();o.arc(-40,-50,120,0,K2);o.fill();
+  o.globalCompositeOperation='source-over';
+  o.restore();
+}
+
+/* chuva de código que desenha a rosa */
+var delay=[],spd=[],END=0;
+for(var c=0;c<COLS;c++){
+  delay[c]=hash(c,1)*1.4;var dur=3.4+hash(c,2)*1.2;
+  spd[c]=(ROWS+14)/dur;END=Math.max(END,delay[c]+dur);
+}
+END=8.2;
+function ez(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);}
+var S1='17',S2='0147',S3='08693';
+function pc(set,c,r,k){return set.charAt(Math.floor(hash(c*3.1+k*1.3,r*1.7+k*.7)*set.length));}
+var shown=false,timers=[];
+var reveals=document.querySelectorAll('.reveal');
+function showText(){
+  reveals.forEach(function(el,i){timers.push(setTimeout(function(){el.classList.add('in');},reduce?0:i*1300));});
+}
+function draw(t){
+  render(t);
+  s.clearRect(0,0,COLS,ROWS);s.drawImage(off,0,0,COLS,ROWS);
+  var d=s.getImageData(0,0,COLS,ROWS).data;
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  ctx.font='bold '+fs+'px ui-monospace,Menlo,Consolas,monospace';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  var tick=Math.floor(t*7),done=t>END,cyc=ROWS+14;
+  for(var c=0;c<COLS;c++){
+    var hd=t<delay[c]?-99:((t-delay[c])*spd[c])%cyc;
+    for(var r=0;r<ROWS;r++){
+      var dd=done?99:hd-r;
+      var i=(r*COLS+c)*4,a=d[i+3],x=(c+.5)*cw,y=(r+.5)*ch;
+      if(!done&&dd>=0&&dd<1.2){ctx.fillStyle='#ffe3ec';ctx.fillText(pc(S3,c,r,tick),x,y);continue;}
+      if(a>60){
+        var R=d[i],G=d[i+1],B=d[i+2],lum=(.3*R+.59*G+.11*B)/255;
+        var gain=(1.15+(1-lum)*.9)*(.92+.16*Math.sin(r*.3-t*2.4+c*.08));
+        var fl=(!done&&dd>=0&&dd<5)?1-dd/5:0;
+        var rr=Math.min(255,R*gain+fl*(255-R)),gg=Math.min(255,G*gain+fl*(235-G)),bb=Math.min(255,B*gain+fl*(240-B));
+        var al=Math.min(1,a/255)*(.45+.55*Math.min(1,lum*1.7));
+        var set=lum<.22?S1:lum<.5?S2:S3,k=hash(c,r)<.12?tick:0;
+        ctx.fillStyle='rgba('+(rr|0)+','+(gg|0)+','+(bb|0)+','+al.toFixed(2)+')';
+        ctx.fillText(pc(set,c,r,k),x,y);
+      }else if(!done&&dd>=0&&dd<12){
+        ctx.fillStyle='rgba(255,92,138,'+((1-dd/12)*.45).toFixed(2)+')';
+        ctx.fillText(pc(S2,c,r,tick),x,y);
+      }
+    }
+  }
+  if(done&&!shown){shown=true;showText();}
+}
+
+var t0=performance.now(),last=0;
+function loop(now){
+  requestAnimationFrame(loop);
+  if(now-last<40)return;last=now;
+  draw((now-t0)/1000);
+}
+fit();
+window.addEventListener('resize',function(){fit();if(reduce)draw(999);});
+document.getElementById('again').addEventListener('click',function(){
+  window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+  timers.forEach(clearTimeout);timers=[];
+  reveals.forEach(function(el){el.classList.remove('in');});
+  shown=false;t0=performance.now();
+});
+if(reduce){draw(999);}else{requestAnimationFrame(loop);}
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
+</script>
+</body>
+</html>
