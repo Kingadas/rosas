@@ -49,9 +49,17 @@ button:focus-visible{outline:2px solid var(--edge);outline-offset:3px}
 .oh{position:absolute;z-index:2;color:#ff4f78;line-height:1;pointer-events:none;animation:bob var(--s) ease-in-out infinite alternate}
 .oh i{display:block;font-style:normal;text-shadow:0 0 12px rgba(255,79,120,.7);animation:beat var(--b) ease-in-out infinite}
 @keyframes bob{from{translate:-8px 6px}to{translate:8px -10px}}
+#start{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(ellipse at 50% 30%,#2a0a16,#0d0408 72%);transition:opacity .7s ease;cursor:pointer;text-align:center;padding:24px}
+#start h2{font-family:"Dancing Script",cursive;font-weight:600;font-size:2.6rem;margin:0;color:var(--core)}
+#start p{margin:0;font-size:1.3rem;color:var(--soft);font-style:italic}
+#start .hh{font-size:3rem;color:#ff4f78;text-shadow:0 0 18px rgba(255,79,120,.7);animation:beat 1.4s ease-in-out infinite}
+#mus{display:none;position:fixed;right:14px;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:40;width:42px;height:42px;margin:0;padding:0;border-radius:50%;font-size:1.2rem;color:var(--core);background:rgba(13,4,8,.6)}
 </style>
 </head>
 <body>
+<div id="start"><div class="hh">♥</div><h2>Para você, meu amor</h2><p>Toque para abrir</p></div>
+<button id="mus" type="button" aria-label="Música">♫</button>
+<audio id="bgm" src="musica.mp3" loop preload="auto"></audio>
 <div id="hearts"></div>
 <div class="stage"><canvas id="cv" role="img" aria-label="Uma rosa desenhada com números, como código caindo"></canvas></div>
 
@@ -59,12 +67,12 @@ button:focus-visible{outline:2px solid var(--edge);outline-offset:3px}
   <h1 class="reveal">Para você, meu amor</h1>
   <p class="reveal">Desde o dia 7 de outubro, quando a gente começou a namorar, o meu mundo ficou mais bonito. Foi ali que o meu coração entendeu para onde queria voltar todos os dias: para você.</p>
   <p class="reveal">A distância é só um endereço. O meu coração já mora aí, do seu lado.</p>
-  <p class="reveal">Hoje existem quilômetros entre nós, mas nenhum deles é grande o bastante para caber o que eu sinto. Cada mensagem sua eu me apaixono sou apaixonado em cada detalhe seu amor seu jeitinho carinhosa seu jeitinho fofo e seu jeito safada heehheeh amo a sua personalidade seu sorriso me deixa louco ❤🌹.</p>
+  <p class="reveal">Hoje existem quilômetros entre nós, mas nenhum deles é grande o bastante para caber o que eu sinto. Cada mensagem sua é um abraço que atravessa a tela, e cada chamada de vídeo é um pedacinho de casa.</p>
   <p class="reveal">Eu sei que a saudade aperta. Mas ela também me lembra, todos os dias, o quanto você importa. Quem ama de longe aprende a amar de verdade: com paciência, com cuidado, com saudade que vira promessa.</p>
-  <p class="reveal">Por enquanto é distância. Mas eu já estou contando os dias até o momento em que vou te abraçar sem pressa amor eu quero ter uma família com vc filhos casar e uma casa nossa minha princesa.</p>
+  <p class="reveal">Por enquanto é distância. Mas eu já estou contando os dias até o momento em que vou te abraçar sem pressa e sem nenhuma tela no meio.</p>
   <p class="reveal dim">Até lá, esta rosa é a minha forma de dizer: eu escolho você, todos os dias, de perto ou de longe.</p>
   <div class="sign reveal">Com todo o meu amor ♥</div>
-  <button class="reveal" id="again" type="button">do seu amor king❤ </button>
+  <button class="reveal" id="again" type="button">Ver a rosa de novo</button>
 </main>
 
 <script>
@@ -249,6 +257,20 @@ document.getElementById('again').addEventListener('click',function(){
   timers.forEach(clearTimeout);timers=[];
   reveals.forEach(function(el){el.classList.remove('in');});
   shown=false;t0=performance.now();
+});
+var ov=document.getElementById('start'),au=document.getElementById('bgm'),mb=document.getElementById('mus');
+ov.addEventListener('click',function(){
+  ov.style.opacity=0;setTimeout(function(){ov.style.display='none';},700);
+  t0=performance.now();shown=false;
+  au.volume=.6;var pr=au.play();if(pr&&pr.catch)pr.catch(function(){});
+  mb.style.display='block';
+});
+mb.addEventListener('click',function(){
+  if(au.paused){au.play().catch(function(){});mb.textContent='♫';}else{au.pause();mb.textContent='🔇';}
+});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){au.pause();}
+  else if(mb.textContent==='♫'&&ov.style.display==='none'){au.play().catch(function(){});}
 });
 if(reduce){draw(999);}else{requestAnimationFrame(loop);}
 })();
